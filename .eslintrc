@@ -1,11 +1,13 @@
 {
+  "parser": "babel-eslint",
   "extends": [
     "eslint:recommended",
     "react-app",
     "plugin:prettier/recommended",
-    "plugin:import/errors"
+    "plugin:import/errors",
+    "plugin:flowtype/recommended"
   ],
-  "plugins": ["sort-imports-es6-autofix"],
+  "plugins": ["sort-imports-es6-autofix", "flowtype"],
   "rules": {
     "sort-imports-es6-autofix/sort-imports-es6": [
       2,
