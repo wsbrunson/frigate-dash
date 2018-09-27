@@ -2,6 +2,7 @@
   "name": "frigate-dash",
   "version": "0.1.0",
   "private": true,
+  "homepage": "http://wsbrunson.github.io/frigate-dash",
   "dependencies": {
     "@reach/component-component": "0.1.0",
     "@reach/dialog": "0.1.0",
@@ -26,6 +27,7 @@
     "eslint-plugin-react": "7.11.1",
     "eslint-plugin-sort-imports-es6-autofix": "0.3.0",
     "flow-bin": "0.80.0",
+    "gh-pages": "^2.0.0",
     "jest-cli": "23.5.0",
     "prettier": "1.14.2",
     "react-scripts": "1.1.5",
@@ -38,6 +40,8 @@
     "eject": "react-scripts eject",
     "eslint": "eslint --fix ./src/",
     "flow": "flow",
-    "validate": "npm run eslint && npm run flow"
+    "validate": "npm run eslint && npm run flow",
+    "predeploy": "npm run validate && npm run build",
+    "deploy": "gh-pages -d build"
   }
 }
