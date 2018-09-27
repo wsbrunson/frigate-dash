@@ -2,7 +2,7 @@
 import * as React from "react";
 import { generateShips } from "./utilities/generateShips";
 import { omit } from "ramda";
-import Chance from "chance";
+import log from "./utilities/log";
 import type { TypeAppActions, TypeAppState, TypeShip } from "./types.flow";
 
 const LOCAL_STORAGE_KEY = "frigate-dash-data";
@@ -15,6 +15,8 @@ const createNormalizedShips = chance =>
   }, {});
 
 type TypeProps = {
+  log: boolean,
+  chance: Object,
   children: ({
     appState: TypeAppState,
     appActions: TypeAppActions
@@ -28,8 +30,10 @@ export default class AppState extends React.Component<TypeProps, TypeAppState> {
     credits: 0
   };
 
+  log = (...args: any) => log(this.props.log, "log", args);
+
   componentDidMount() {
-    const chance = new Chance();
+    const { chance } = this.props;
     const localState = JSON.parse(
       window.localStorage.getItem(LOCAL_STORAGE_KEY)
     );
@@ -52,10 +56,14 @@ export default class AppState extends React.Component<TypeProps, TypeAppState> {
   }
 
   updateState = (state: $Shape<TypeAppState>) => {
-    this.setState({
-      ...this.state,
-      ...state
-    });
+    this.log("before", this.state);
+    this.setState(
+      {
+        ...this.state,
+        ...state
+      },
+      () => this.log("after", this.state)
+    );
 
     window.localStorage.setItem(
       LOCAL_STORAGE_KEY,
@@ -70,10 +78,7 @@ export default class AppState extends React.Component<TypeProps, TypeAppState> {
     this.updateState({
       userShips: {
         ...this.state.userShips,
-        ships: {
-          ...this.state.userShips.ships,
-          [ship.id]: ship
-        }
+        [ship.id]: ship
       }
     });
 
@@ -84,15 +89,21 @@ export default class AppState extends React.Component<TypeProps, TypeAppState> {
 
   buyShip = (shipToBuy: TypeShip) => {
     const state = {
-      saleShips: {
-        ...this.state.saleShips,
-        ...omit(shipToBuy.id, this.state.saleShips)
-      },
+      saleShips: omit([shipToBuy.id], this.state.saleShips),
       userShips: {
         ...this.state.userShips,
         [shipToBuy.id]: shipToBuy
       },
       credits: this.state.credits - shipToBuy.value
+    };
+
+    this.updateState(state);
+  };
+
+  sellShip = (shipToSell: TypeShip) => {
+    const state = {
+      userShips: omit([shipToSell.id], this.state.userShips),
+      credits: this.state.credits + shipToSell.value
     };
 
     this.updateState(state);
@@ -106,7 +117,8 @@ export default class AppState extends React.Component<TypeProps, TypeAppState> {
       appActions: {
         updateShip: this.updateShip,
         addCredits: this.addCredits,
-        buyShip: this.buyShip
+        buyShip: this.buyShip,
+        sellShip: this.sellShip
       }
     });
   }

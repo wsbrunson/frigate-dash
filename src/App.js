@@ -18,8 +18,13 @@ const AppContainer = styled("div")`
   padding: 1rem;
 `;
 
-const App = () => (
-  <AppState>
+type TypeProps = {
+  log: boolean,
+  chance: Object
+};
+
+const App = ({ log, chance }: TypeProps) => (
+  <AppState log={log} chance={chance}>
     {({ appState, appActions }) => (
       <AppContainer>
         <Router>

@@ -1,10 +1,18 @@
 // @flow
 import { Dialog } from "@reach/dialog";
 import { Match, navigate } from "@reach/router";
+import {
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalHeading
+} from "./components";
+import { getSaleShipValue } from "./selectors";
+import Button from "./components/Button";
 import Component from "@reach/component-component";
 import React from "react";
-import styled from "react-emotion";
-import type { TypeAppActions, TypeAppState, TypeShip } from "./types.flow";
+import ShipStats from "./ShipStats";
+import type { TypeAppActions, TypeAppState } from "./types.flow";
 
 type TypeProps = {
   appState: TypeAppState,
@@ -14,23 +22,34 @@ type TypeProps = {
 
 const BuyShipModal = ({ appState, appActions, id }: TypeProps) => (
   <Match path="/buy-ship/:id">
-    {props => (
-      <Component initialState={{ isDialogOpen: props.match }}>
+    {({ match }) => (
+      <Component initialState={{ isDialogOpen: match }}>
         {({ state }) => (
           <Dialog isOpen={state.isDialogOpen}>
-            <button onClick={() => navigate("/")}>Close</button>
-            <span>
-              ${appState.saleShips[id] ? appState.saleShips[id].value : 0}
-            </span>
-            <button
-              onClick={() => {
-                navigate("/");
-                appActions.buyShip(appState.saleShips[id]);
-              }}
-            >
-              Buy Ship
-            </button>
-            <button onClick={() => navigate("/")}>No Thanks</button>
+            <ModalHeader>
+              <ModalHeading>Buy Ship</ModalHeading>
+              <Button type="button" onClick={() => navigate("/")}>
+                Close
+              </Button>
+            </ModalHeader>
+            <ModalContent>
+              <ShipStats ship={appState.saleShips[id]} />
+            </ModalContent>
+            <ModalFooter>
+              <Button
+                type="button"
+                disabled={appState.credits < getSaleShipValue(appState, id)}
+                onClick={() => {
+                  navigate("/");
+                  appActions.buyShip(appState.saleShips[id]);
+                }}
+              >
+                Buy Ship
+              </Button>
+              <Button type="button" onClick={() => navigate("/")}>
+                No Thanks
+              </Button>
+            </ModalFooter>
           </Dialog>
         )}
       </Component>

@@ -1,16 +1,24 @@
 // @flow
+
+export type TypeShipStats = {|
+  health: number,
+  armor: number,
+  speed: number,
+  weapons: number
+|};
+
 export type TypeShip = {|
   callSign: string,
   captainName: string,
   id: string,
   shipName: string,
-  health: number,
-  value: number
+  value: number,
+  stats: TypeShipStats
 |};
 
-type TypeShips = {
+type TypeShips = {|
   [string]: TypeShip
-};
+|};
 
 export type TypeAppState = {|
   userShips: TypeShips,
@@ -21,5 +29,6 @@ export type TypeAppState = {|
 export type TypeAppActions = {|
   updateShip: TypeShip => void,
   addCredits: number => void,
-  buyShip: TypeShip => void
+  buyShip: TypeShip => void,
+  sellShip: TypeShip => void
 |};

@@ -4,10 +4,6 @@ import Panel from "../components/Panel";
 import styled from "react-emotion";
 import type { TypeShip } from "../types.flow";
 
-const ShipsPanelContainer = styled("div")`
-  width: 30%;
-`;
-
 const ShipsHeading = styled("h2")`
   margin: 0;
   margin-bottom: 0.5rem;
@@ -28,6 +24,8 @@ type TypeProps = {
 const ShipList = styled("ul")`
   list-style: none;
   padding: 0;
+  margin: 0;
+  margin-top: 1rem;
 `;
 
 const ShipsPanel = ({
@@ -36,16 +34,14 @@ const ShipsPanel = ({
   ShipListItem,
   onShipClick
 }: TypeProps) => (
-  <ShipsPanelContainer>
-    <Panel>
-      <ShipsHeading>{heading}</ShipsHeading>
-      <ShipList>
-        {ships.map(ship => (
-          <ShipListItem ship={ship} onShipClick={onShipClick} />
-        ))}
-      </ShipList>
-    </Panel>
-  </ShipsPanelContainer>
+  <Panel>
+    <ShipsHeading>{heading}</ShipsHeading>
+    <ShipList>
+      {ships.map(ship => (
+        <ShipListItem key={ship.id} ship={ship} onShipClick={onShipClick} />
+      ))}
+    </ShipList>
+  </Panel>
 );
 
 export default ShipsPanel;

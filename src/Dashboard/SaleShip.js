@@ -34,7 +34,7 @@ type TypeProps = {
 };
 
 const SaleShip = ({ ship, onShipClick }: TypeProps) => (
-  <ShipItem key={ship.id} onClick={() => onShipClick(ship.id)}>
+  <ShipItem onClick={() => onShipClick(ship.id)}>
     <ShipCallSign>{ship.callSign}</ShipCallSign>
     <span>${ship.value}</span>
   </ShipItem>

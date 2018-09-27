@@ -9,6 +9,9 @@ const Panel = styled("section")`
   height: 100%;
   border: ${borderStyle};
   overflow-y: scroll;
+  margin-right: 0.5rem;
+  margin-left: 0.5rem;
+  width: 12rem;
 `;
 
 export default Panel;

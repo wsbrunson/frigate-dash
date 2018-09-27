@@ -1,20 +1,24 @@
 // @flow
 import { Dialog } from "@reach/dialog";
-import { Field, Formik } from "formik";
+import { Form, Formik } from "formik";
+import {
+  InputFormField,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalHeading
+} from "./components";
 import { Match, navigate } from "@reach/router";
+import Button from "./components/Button";
 import Component from "@reach/component-component";
 import React from "react";
+import ShipStats from "./ShipStats";
 import styled from "react-emotion";
 import type { TypeAppActions, TypeAppState, TypeShip } from "./types.flow";
 
-const Form = styled("form")`
+const FormContainer = styled("div")`
   display: flex;
   flex-direction: column;
-  padding: 1rem;
-`;
-
-const FormField = styled("div")`
-  margin: 0.5rem;
 `;
 
 type TypeProps = {
@@ -25,38 +29,64 @@ type TypeProps = {
 
 const EditShipModal = ({ appState, appActions, id }: TypeProps) => (
   <Match path="/ship/:id">
-    {props => (
-      <Component initialState={{ isDialogOpen: props.match }}>
+    {({ match }) => (
+      <Component initialState={{ isDialogOpen: match }}>
         {({ state }) => (
           <Dialog isOpen={state.isDialogOpen}>
-            <button onClick={() => navigate("/")}>Close</button>
+            <ModalHeader>
+              <ModalHeading>View/Edit Ship</ModalHeading>
+              <Button type="button" onClick={() => navigate("/")}>
+                Close
+              </Button>
+            </ModalHeader>
             <Formik
               initialValues={{ ...appState.userShips[id] }}
-              onSubmit={(shipForm: TypeShip) => appActions.updateShip(shipForm)}
+              onSubmit={(shipForm: TypeShip, form, third) => {
+                !form.dirty && appActions.updateShip(shipForm);
+              }}
             >
-              {({ handleSubmit }) => (
-                <Form onSubmit={handleSubmit}>
-                  <FormField>
-                    <label htmlFor="call-sign">
-                      Call Sign
-                      <Field id="call-sign" type="text" name="callSign" />
-                    </label>
-                  </FormField>
-                  <FormField>
-                    <label htmlFor="captain-name">
-                      Captain Name
-                      <Field id="captain-name" type="text" name="captainName" />
-                    </label>
-                  </FormField>
-                  <FormField>
-                    <label htmlFor="ship-name">
-                      Ship Name
-                      <Field id="ship-name" type="text" name="shipName" />
-                    </label>
-                  </FormField>
-                  <button type="submit" onClick={() => navigate("/")}>
-                    Finish
-                  </button>
+              {() => (
+                <Form>
+                  <ModalContent>
+                    <FormContainer>
+                      <InputFormField
+                        id="call-sign"
+                        name="callSign"
+                        label="Call Sign"
+                      />
+                      <InputFormField
+                        id="captain-name"
+                        name="captainName"
+                        label="Captain Name"
+                      />
+                      <InputFormField
+                        id="ship-name"
+                        name="shipName"
+                        label="Ship Name"
+                      />
+                    </FormContainer>
+                    <ShipStats ship={appState.userShips[id]} />
+                  </ModalContent>
+                  <ModalFooter>
+                    <Button
+                      type="button"
+                      onClick={() => {
+                        appActions.sellShip(appState.userShips[id]);
+                        navigate("/");
+                      }}
+                      warning
+                    >
+                      Sell Ship
+                    </Button>
+                    <Button
+                      name="submit"
+                      type="submit"
+                      value="submit-true"
+                      onClick={() => navigate("/")}
+                    >
+                      Finish
+                    </Button>
+                  </ModalFooter>
                 </Form>
               )}
             </Formik>

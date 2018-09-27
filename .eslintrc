@@ -5,9 +5,16 @@
     "react-app",
     "plugin:prettier/recommended",
     "plugin:import/errors",
-    "plugin:flowtype/recommended"
+    "plugin:flowtype/recommended",
+    "plugin:react/recommended"
   ],
   "plugins": ["sort-imports-es6-autofix", "flowtype"],
+  "settings": {
+    "react": {
+      "version": "16.4.2",
+      "flowVersion": "0.80.0"
+    }
+  },
   "rules": {
     "sort-imports-es6-autofix/sort-imports-es6": [
       2,

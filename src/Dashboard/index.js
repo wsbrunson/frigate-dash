@@ -40,9 +40,6 @@ const Dashboard = ({ appState, appActions, children }: TypeProps) => (
       <Panel>
         <span>Credits: </span>
         <span>{appState.credits}</span>
-        <button onClick={() => appActions.addCredits(3000)}>
-          Add Credits +
-        </button>
       </Panel>
     </DashboardContainer>
     {children}
