@@ -1,10 +1,10 @@
 // @flow
 import "@reach/dialog/styles.css";
 import { Router } from "@reach/router";
-import AppState from "./AppState";
-import BuyShipModal from "./BuyShipModal";
+import AppState from "./state/AppState";
+import BuyShipModal from "./Modals/BuyShipModal";
 import Dashboard from "./Dashboard";
-import EditShipModal from "./EditShipModal";
+import EditShipModal from "./Modals/EditShipModal";
 import React from "react";
 import styled from "react-emotion";
 
